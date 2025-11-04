@@ -20,13 +20,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Packages
         run: yarn install
+        working-directory: my-react-app
       - name: Build project
         run: yarn build
+        working-directory: my-react-app
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4
         with:
           name: production-files
-          path: ./build
+          path: my-react-app/build
 
   deploy:
     name: Deploy
@@ -38,9 +40,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: production-files
-          path: ./build
+          path: my-react-app/build
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: my-react-app/build
